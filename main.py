@@ -37,11 +37,13 @@ class DiabetesExpert(KnowledgeEngine):
         height = input(Utils.prGreen("\n> What is your height in centimeters?  "))
         self.declare(Fact(height=float(height)))  # Store height as a fact
     
+    # Rule 5: If the user has not provided their diabetes type, ask for it
     @Rule(Fact(action="collect_data"),  NOT(Fact(diabetes_type=W())), salience=600)
     def ask_diabetes_type(self):
         diabetes_type = input(Utils.prGreen("\n> What type of diabetes do you have? (1,2)  "))
         self.declare(Fact(diabetes_type=int(diabetes_type)))  # Store diabetes type as a fact
 
+    # Rule 6: If the user has not provided their activity level, ask for it
     @Rule(Fact(action="collect_data"), NOT(Fact(activity_level=W())), salience=400)
     def ask_activity_level(self):
         activity_level = input(Utils.prGreen("\n> What is your activity level? (sedentary, light, moderate, active, very active):  "))
@@ -58,20 +60,32 @@ class DiabetesExpert(KnowledgeEngine):
         self.declare(Fact(action="suggest_plan")) # update the action fact
 
     # Suggestions ------------------------------------------------------------------
-     # Rule 5: Calculate BMR once all data is collected
-    @Rule(Fact(action="suggest_plan"), Fact(gender=MATCH.gender), Fact(age=MATCH.age), Fact(weight=MATCH.weight), Fact(height=MATCH.height), salience=600)
-    def calculate_bmr(self, gender, age, weight, height):
+    # Rule 8: check glucose level and warn user if it is too high or too low
+    @Rule(Fact(action= "suggest_plan"), Fact(glucose_level=MATCH.glucose_level) , salience=250)
+    def check_glucose_emergency(self, glucose_level):
+        if glucose_level < 50:
+            print(Utils.prRed("\n⚠️ EMERGENCY: Severely low blood sugar! Seek immediate medical attention!"))
+        elif glucose_level > 300:
+            print(Utils.prRed("\n⚠️ EMERGENCY: Severely high blood sugar! Seek immediate medical attention!"))
+
+    # Rule 9: Calculate BMI once all data is collected and warn user if it indicates obesity
+    @Rule(Fact(action= "suggest_plan"), Fact(weight=MATCH.weight), Fact(height=MATCH.height), salience=200)
+    def calculate_bmi(self, weight, height):
+        bmi = weight / ((height/100) ** 2)
+        self.declare(Fact(bmi=bmi))
+        if bmi > 30:
+            print(Utils.prRed("\n⚠️ Warning: BMI indicates obesity. Consider consulting with a healthcare provider."))
+
+     # Rule 10: Calculate BMR once all data is collected 
+    @Rule(Fact(action="suggest_plan"), Fact(gender=MATCH.gender), Fact(age=MATCH.age), Fact(weight=MATCH.weight), Fact(height=MATCH.height), Fact(activity_level=MATCH.activity_level), salience=150)
+    def calculate_bmr(self, gender, age, weight, height, activity_level):
         bmr = 0
         if gender == 'female':
             bmr = 10 * weight + 6.25 * height - 5 * age - 161
         else:
             bmr = 10 * weight + 6.25 * height - 5 * age + 5
-        self.declare(Fact(bmr=bmr))  # Store BMR as a fact
 
-    # Rule 6: If the user has not provided their activity level, ask for it
-    @Rule(Fact(action="suggest_plan"), Fact(bmr = MATCH.bmr) , Fact(activity_level=MATCH.activity_level))
-    def calculate_calories(self, activity_level, bmr):
-        # Calculate the activity factor based on the activity level
+            # Calculate the activity factor based on the activity level
         activity_factor = 0
         if(activity_level == "sedentary"):
             activity_factor = 1.2
@@ -83,18 +97,19 @@ class DiabetesExpert(KnowledgeEngine):
             activity_factor = 1.725
         elif(activity_level == "very active"):
             activity_factor = 1.9
-        calories = activity_factor * bmr
-        self.declare(Fact(calories=calories))  # Update the BMR fact with the activity factor
-    
-    #General Suggestions:
-    @Rule(Fact(action="suggest_plan"), Fact(diabetes_type=MATCH.diabetes_type), salience=150)
+        updatedBMR = activity_factor * bmr
+        self.declare(Fact(bmr=updatedBMR))  # Store BMR as a fact
+
+    # Rule 11: show recommendations based on diabetes type
+    @Rule(Fact(action="suggest_plan"), Fact(diabetes_type=MATCH.diabetes_type), salience=100)
     def suggest_diabetes_type(self, diabetes_type):
         if diabetes_type == 1:
             print(Utils.prLightPurple("\nFor Type 1 diabetes: Balance carbs and protein, include post-exercise snacks to prevent hypoglycemia."))
         else:
             print(Utils.prLightPurple("\nFor Type 2 diabetes: Limit high-glycemic carbs, increase fiber intake with meals like vegetables, whole grains, and lean proteins."))
 
-    @Rule(Fact(action="suggest_plan"), Fact(glucose_level=MATCH.glucose_level), salience=100)
+    # Rule 12: show recommendations based on glucose level
+    @Rule(Fact(action="suggest_plan"), Fact(glucose_level=MATCH.glucose_level), salience=50)
     def suggest_glucose_level(self, glucose_level):
         if glucose_level < 70:
             print(Utils.prLightPurple("\nYour glucose level is low. Please consume 15-20 grams of glucose or simple carbs."))
@@ -104,15 +119,16 @@ class DiabetesExpert(KnowledgeEngine):
             print(Utils.prLightPurple(("\nYour glucose level is high. Please drink water and avoid high-carb foods.")))
 
 
-    @Rule(Fact(action="suggest_plan"), Fact(calories=MATCH.calories), Fact(glucose_level=MATCH.glucose_level), salience=50)
-    def adjust_meals(self, calories, glucose_level):
+    # Rule 13: Adjust meal plan based on user data
+    @Rule(Fact(action="suggest_plan"), Fact(bmr=MATCH.bmr), Fact(glucose_level=MATCH.glucose_level), salience=1)
+    def adjust_meals(self, bmr, glucose_level):
         print(Utils.prLightPurple("\nBased on your data, we recommend the following meal plan:"))
         adjustedMeals = {}
         meals = {}
-        if calories < 1500:
+        if bmr < 1500:
             print("\nWe recommend a low-calorie meal plan")
             meals =self.meal_options['low_calorie']
-        elif calories >= 1500 and calories < 2000:
+        elif bmr >= 1500 and bmr < 2000:
             print("\nWe recommend a medium-calorie meal plan")
             meals =self.meal_options['medium_calorie']
         else:
@@ -132,6 +148,7 @@ class DiabetesExpert(KnowledgeEngine):
 
         self.print_meal_plan(adjustedMeals)
 
+    #helper function to print meal plan
     def print_meal_plan(self, meal_plan):
         for meal_type, items in meal_plan.items():
             print(f"\n{meal_type.capitalize()}:")
@@ -146,8 +163,6 @@ class DiabetesExpert(KnowledgeEngine):
                 print(Utils.prYellow(f"  Glucose Impact: {item['glucose_impact']}"))
                 print(Utils.prYellow("-" * 30))
     
-
-
 
 class Utils:
     @staticmethod
@@ -166,9 +181,6 @@ class Utils:
     def prLightPurple(skk): 
         return "\033[94m{}\033[00m".format(skk)
     
-
-
-
 
 if __name__ == "__main__":
     engine = DiabetesExpert()
