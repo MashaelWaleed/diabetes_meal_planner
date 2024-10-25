@@ -90,35 +90,35 @@ class DiabetesExpert(KnowledgeEngine):
     @Rule(Fact(action="suggest_plan"), Fact(diabetes_type=MATCH.diabetes_type), salience=150)
     def suggest_diabetes_type(self, diabetes_type):
         if diabetes_type == 1:
-            print("For Type 1 diabetes, Balance carbs and protein, include post-exercise snacks to prevent hypoglycemia.")
+            print(Utils.prLightPurple("\nFor Type 1 diabetes: Balance carbs and protein, include post-exercise snacks to prevent hypoglycemia."))
         else:
-            print("For Type 2 diabetes, Limit high-glycemic carbs, increase fiber intake with meals like vegetables, whole grains, and lean proteins.")
+            print(Utils.prLightPurple("\nFor Type 2 diabetes: Limit high-glycemic carbs, increase fiber intake with meals like vegetables, whole grains, and lean proteins."))
 
     @Rule(Fact(action="suggest_plan"), Fact(glucose_level=MATCH.glucose_level), salience=100)
     def suggest_glucose_level(self, glucose_level):
         if glucose_level < 70:
-            print("Your glucose level is low. Please consume 15-20 grams of glucose or simple carbs.")
+            print(Utils.prLightPurple("\nYour glucose level is low. Please consume 15-20 grams of glucose or simple carbs."))
         elif glucose_level >= 70 and glucose_level < 180:
-            print("Your glucose level is normal.")
+            print(Utils.prLightPurple("\nYour glucose level is normal."))
         else:
-            print("Your glucose level is high. Please drink water and avoid high-carb foods.")
+            print(Utils.prLightPurple(("\nYour glucose level is high. Please drink water and avoid high-carb foods.")))
 
 
     @Rule(Fact(action="suggest_plan"), Fact(calories=MATCH.calories), Fact(glucose_level=MATCH.glucose_level), salience=50)
     def adjust_meals(self, calories, glucose_level):
+        print(Utils.prLightPurple("\nBased on your data, we recommend the following meal plan:"))
         adjustedMeals = {}
         meals = {}
-
         if calories < 1500:
-            print("We recommend a low-calorie meal plan")
+            print("\nWe recommend a low-calorie meal plan")
             meals =self.meal_options['low_calorie']
         elif calories >= 1500 and calories < 2000:
-            print("We recommend a medium-calorie meal plan")
+            print("\nWe recommend a medium-calorie meal plan")
             meals =self.meal_options['medium_calorie']
         else:
-            print("We recommend a high-calorie meal plan")
+            print("\nWe recommend a high-calorie meal plan")
             meals =self.meal_options['high_calorie']
-        
+        print(glucose_level)
         for mealTime, mealOptions in meals.items():
             adjustedMeals[mealTime] = []
             for meal in mealOptions:
@@ -129,7 +129,24 @@ class DiabetesExpert(KnowledgeEngine):
                         modifiedMeal['details'] += " (reduced portion of carbs)"
                         modifiedMeal['calories'] = round(modifiedMeal['calories'] * 0.9)
                 adjustedMeals[mealTime].append(modifiedMeal)
-        print(adjustedMeals)
+
+        self.print_meal_plan(adjustedMeals)
+
+    def print_meal_plan(self, meal_plan):
+        for meal_type, items in meal_plan.items():
+            print(f"\n{meal_type.capitalize()}:")
+            print(Utils.prYellow("-" * 30))
+            for item in items:
+                print(Utils.prYellow(f"Name: {item['name']}"))
+                print(Utils.prYellow(f"  Calories: {item['calories']} kcal"))
+                print(Utils.prYellow(f"  Details: {item['details']}"))
+                print(Utils.prYellow(f"  Carbs: {item['carbs']} g"))
+                print(Utils.prYellow(f"  Protein: {item['protein']} g"))
+                print(Utils.prYellow(f"  Fats: {item['fats']} g"))
+                print(Utils.prYellow(f"  Glucose Impact: {item['glucose_impact']}"))
+                print(Utils.prYellow("-" * 30))
+    
+
 
 
 class Utils:
@@ -148,6 +165,7 @@ class Utils:
     @staticmethod
     def prLightPurple(skk): 
         return "\033[94m{}\033[00m".format(skk)
+    
 
 
 
@@ -156,4 +174,4 @@ if __name__ == "__main__":
     engine = DiabetesExpert()
     engine.reset()  # Prepare the engine for a new session
     engine.run()  # Run the engine to trigger rules
-    print("Diagnosis complete")
+    print(Utils.prRed("\n\nThank you for using the Diabetes Expert System 🩸\n"))
