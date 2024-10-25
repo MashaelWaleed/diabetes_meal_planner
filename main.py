@@ -59,12 +59,8 @@ class DiabetesExpert(KnowledgeEngine):
             activity_factor = 1.725
         elif(activity_level == "very active"):
             activity_factor = 1.9
-        print(self.facts.items())
-        updatedBMR = activity_factor * bmr
-        bmr_id = next(factId for factId, fact in self.facts.items() if fact.get('bmr'))
-        if bmr_id:
-            self.retract(bmr_id)
-        self.declare(Fact(bmr=updatedBMR))  # Update the BMR fact with the activity factor
+        calories = activity_factor * bmr
+        self.declare(Fact(calories=calories))  # Update the BMR fact with the activity factor
 
     # Rule 7: If the user has not provided their glucose level, ask for it
     @Rule(Fact(action="collect_data"), NOT(Fact(glucose_level=W())), salience=400)
