@@ -1,0 +1,145 @@
+{
+    "low_calorie": {
+        "breakfast": [
+            {
+                "name": "Light Oatmeal Bowl",
+                "calories": 300,
+                "details": "1/2 cup oatmeal, 1/2 cup berries, 10 almonds, 1 tsp honey",
+                "carbs": 45,
+                "protein": 10,
+                "fats": 9,
+                "glucose_impact": "moderate"
+            },
+            {
+                "name": "Protein Yogurt Bowl",
+                "calories": 250,
+                "details": "1 cup Greek yogurt, 1/4 cup granola, 1/2 cup strawberries",
+                "carbs": 30,
+                "protein": 20,
+                "fats": 8,
+                "glucose_impact": "low"
+            },
+            {
+                "name": "Light Egg Toast",
+                "calories": 280,
+                "details": "2 eggs, 1 slice whole grain bread, 1/4 avocado",
+                "carbs": 20,
+                "protein": 16,
+                "fats": 12,
+                "glucose_impact": "low"
+            }
+        ],
+        "lunch": [
+            {
+                "name": "Chicken Salad Bowl",
+                "calories": 350,
+                "details": "4oz grilled chicken, 2 cups mixed greens, 1 tbsp olive oil dressing",
+                "carbs": 10,
+                "protein": 35,
+                "fats": 15,
+                "glucose_impact": "very low"
+            },
+            {
+                "name": "Tuna Quinoa Bowl",
+                "calories": 380,
+                "details": "1 can tuna, 1/2 cup quinoa, mixed vegetables",
+                "carbs": 35,
+                "protein": 30,
+                "fats": 12,
+                "glucose_impact": "low"
+            }
+        ],
+        "dinner": [
+            {
+                "name": "Baked Fish Plate",
+                "calories": 320,
+                "details": "5oz white fish, 1 cup roasted vegetables, 1/2 sweet potato",
+                "carbs": 30,
+                "protein": 35,
+                "fats": 10,
+                "glucose_impact": "low"
+            }
+        ],
+        "snacks": [
+            {
+                "name": "Apple and Nuts",
+                "calories": 150,
+                "details": "1 small apple, 12 almonds",
+                "carbs": 15,
+                "protein": 4,
+                "fats": 7,
+                "glucose_impact": "moderate"
+            }
+        ]
+    },
+    "medium_calorie": {
+        "breakfast": [
+            {
+                "name": "Power Oatmeal Bowl",
+                "calories": 400,
+                "details": "3/4 cup oatmeal, 1 cup berries, 15 almonds, 1 scoop protein powder",
+                "carbs": 55,
+                "protein": 25,
+                "fats": 12,
+                "glucose_impact": "moderate"
+            }
+        ],
+        "lunch": [
+            {
+                "name": "Quinoa Power Bowl",
+                "calories": 450,
+                "details": "5oz chicken, 3/4 cup quinoa, roasted vegetables, avocado",
+                "carbs": 45,
+                "protein": 35,
+                "fats": 18,
+                "glucose_impact": "moderate"
+            }
+        ],
+        "dinner": [
+            {
+                "name": "Salmon Dinner",
+                "calories": 480,
+                "details": "6oz salmon, 1 cup brown rice, steamed broccoli",
+                "carbs": 45,
+                "protein": 40,
+                "fats": 22,
+                "glucose_impact": "moderate"
+            }
+        ]
+    },
+    "high_calorie": {
+        "breakfast": [
+            {
+                "name": "Complete Breakfast Bowl",
+                "calories": 550,
+                "details": "1 cup oatmeal, 1.5 cup berries, 20 almonds, 2 eggs",
+                "carbs": 65,
+                "protein": 32,
+                "fats": 18,
+                "glucose_impact": "moderate-high"
+            }
+        ],
+        "lunch": [
+            {
+                "name": "Power Lunch Plate",
+                "calories": 600,
+                "details": "7oz chicken, 1 cup quinoa, large salad, avocado",
+                "carbs": 55,
+                "protein": 45,
+                "fats": 25,
+                "glucose_impact": "moderate"
+            }
+        ],
+        "dinner": [
+            {
+                "name": "Hearty Dinner Plate",
+                "calories": 650,
+                "details": "8oz lean beef, 1.5 cup brown rice, roasted vegetables",
+                "carbs": 60,
+                "protein": 50,
+                "fats": 28,
+                "glucose_impact": "moderate-high"
+            }
+        ]
+    }
+}

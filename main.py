@@ -1,4 +1,6 @@
 from experta import *
+import json
+
 
 class DiabetesExpert(KnowledgeEngine):
     @DefFacts()
@@ -6,6 +8,10 @@ class DiabetesExpert(KnowledgeEngine):
         print("Welcome to the Diabetes Expert System")
         print("Please answer the following questions to help us diagnose your condition")
         yield Fact(action="collect_data")  # Initial fact to start the process
+
+        with open("meal_options.json") as f:
+            self.meal_options = json.load(f)
+        
 
     # Rule 1: If the user has not provided their gender, ask for it
     @Rule(Fact(action="collect_data"), NOT(Fact(gender=W())), salience=1000)
