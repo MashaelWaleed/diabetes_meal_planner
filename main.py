@@ -5,163 +5,225 @@ import json
 class DiabetesExpert(KnowledgeEngine):
     @DefFacts()
     def _initial_action(self):
-        print(Utils.prRed("\n\nWelcome to the Diabetes Expert System 🩸\n"))
-        print("Please answer the following questions to suggest a dietary for you\n")
-        yield Fact(action="collect_data")  # Initial fact to start the process
-
-        with open("meal_options.json") as f:
-            self.meal_options = json.load(f)
+        print(Utils.prRed("\n🩸 Welcome to the Diabetes Meal Planning Expert System 🩸"))
+        yield Fact(phase="initial")
+        yield Fact(need="basic_info")
         
+    # Rule 1: Basic Information Collection
+    @Rule(
+        Fact(phase="initial"),
+        Fact(need="basic_info"),
+        NOT(Fact(personal_info_collected=True)))
+    def collect_personal_info(self):
+        print("\n📋I'm going to ask you about some of your personal information: ")
+        gender = input(Utils.prGreen("> What is your gender? (female/male): ")).strip().lower()
+        age = int(input(Utils.prGreen("> What is your age?: ")))
+        weight = float(input(Utils.prGreen("> What is your weight in kilograms?: ")))
+        height = float(input(Utils.prGreen("> What is your height in centimeters?: ")))
+        pregnancy = input(Utils.prGreen("> Are you pregnant? (yes/no): ")).strip().lower() if gender == "female" else "no"
+        
+        self.declare(Fact(gender=gender))
+        self.declare(Fact(age=age))
+        self.declare(Fact(weight=weight))
+        self.declare(Fact(height=height))
+        self.declare(Fact(pregnant=(pregnancy == "yes")))
+        self.declare(Fact(personal_info_collected=True))
+        self.declare(Fact(need="medical_info"))
 
-    # Rule 1: If the user has not provided their gender, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(gender=W())), salience=1000)
-    def ask_gender(self):
-        gender = input(Utils.prGreen("\n> What is your gender? Female/Male:  "))  # Ask for the user's gender
-        self.declare(Fact(gender=gender.strip().lower()))  # Store the gender as a fact
 
-    # Rule 2: If the user has not provided their age, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(age=W())), salience=900)
-    def ask_age(self):
-        age = input(Utils.prGreen("\n> What is your age?  "))  # Ask for the user's age
-        self.declare(Fact(age=int(age)))  # Store age as a fact
+    # Rule 2: Medical Information Collection
+    @Rule(Fact(need="medical_info"), NOT(Fact(medical_info_collected=True)))
+    def collect_medical_info(self):
+        print("\n🏥 Now I\m going to ask you about your health: ")
+        diabetes_type = int(input(Utils.prGreen("> What type of diabetes do you have? (1/2): ")))
+        current_hba1c = float(input(Utils.prGreen("> What is your current hba1c level? (%): ")))
+        
+        self.declare(Fact(diabetes_type=diabetes_type))
+        self.declare(Fact(current_hba1c=current_hba1c))
+        self.declare(Fact(medical_info_collected=True))
+        self.declare(Fact(need="lifestyle_info"))
 
-    # Rule 3: If the user has not provided their weight, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(weight=W())), salience=800)
-    def ask_weight(self):
-        weight = input(Utils.prGreen("\n> What is your weight in kilograms?  "))
-        self.declare(Fact(weight=float(weight)))  # Store weight as a fact
+    # Rule 3: Lifestyle Information Collection
+    @Rule(Fact(need="lifestyle_info"), NOT(Fact(lifestyle_info_collected=True)))
+    def collect_lifestyle_info(self):
+        print("\n🏃 Now I need some information about your lifestyle: ")
+        activity_level = input(Utils.prGreen("> Activity level? (sedentary/light/moderate/active/very_active): ")).strip().lower()
+        stress_level = input(Utils.prGreen("> Stress level? (low/moderate/high): ")).strip().lower()
+        sleep_hours = float(input(Utils.prGreen("> Average hours of sleep per night?: ")))
+        
+        self.declare(Fact(activity_level=activity_level))
+        self.declare(Fact(stress_level=stress_level))
+        self.declare(Fact(sleep_hours=sleep_hours))
+        self.declare(Fact(lifestyle_info_collected=True))
+        self.declare(Fact(need="dietary_info"))
 
-    # Rule 4: If the user has not provided their height, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(height=W())), salience=700)
-    def ask_height(self):
-        height = input(Utils.prGreen("\n> What is your height in centimeters?  "))
-        self.declare(Fact(height=float(height)))  # Store height as a fact
-    
-    # Rule 5: If the user has not provided their diabetes type, ask for it
-    @Rule(Fact(action="collect_data"),  NOT(Fact(diabetes_type=W())), salience=600)
-    def ask_diabetes_type(self):
-        diabetes_type = input(Utils.prGreen("\n> What type of diabetes do you have? (1,2)  "))
-        self.declare(Fact(diabetes_type=int(diabetes_type)))  # Store diabetes type as a fact
+    # Rule 4: Dietary Information Collection
+    @Rule(
+        Fact(need="dietary_info"),
+        NOT(Fact(dietary_info_collected=True))
+    )
+    def collect_dietary_info(self):
+        """Collect dietary preferences and restrictions"""
+        print("\n🥗 Now I need to ask you about your diet: ")
+        meal_frequency = int(input(Utils.prGreen("> Preferred number of meals per day (3-6): ")))
+        snacks = int(input(Utils.prGreen("> Preferred number of snacks per day (0-3): ")))
+        
+        self.declare(Fact(meal_frequency=meal_frequency))
+        self.declare(Fact(snacks=snacks))
+        self.declare(Fact(dietary_info_collected=True))
+        self.declare(Fact(need="risk_assessment"))
 
-    # Rule 6: If the user has not provided their activity level, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(activity_level=W())), salience=400)
-    def ask_activity_level(self):
-        activity_level = input(Utils.prGreen("\n> What is your activity level? (sedentary, light, moderate, active, very active):  "))
-        self.declare(Fact(activity_level=activity_level.strip().lower()))  # Store activity level as a fact
+    # Rule 5: Risk Assessment
+    @Rule(
+        Fact(need="risk_assessment"),
+        Fact(current_hba1c=MATCH.hba1c),
+        Fact(age=MATCH.age),
+        Fact(diabetes_type=MATCH.diabetes_type),
+        NOT(Fact(risk_level=W()))
+    )
+    def assess_risk_level(self, hba1c, age, diabetes_type):
+        risk_level = "low"
+        
+        if hba1c > 8.0 or (age > 65 and diabetes_type == 1) or (hba1c > 7.5 and diabetes_type == 2):
+            risk_level = "high"
+        elif hba1c > 7.0 or age > 60:
+            risk_level = "moderate"
+            
+        self.declare(Fact(risk_level=risk_level))
+        print(Utils.prYellow(f"\n⚠️ Risk Assessment: {risk_level.upper()} risk level detected") )
+        self.declare(Fact(need="caloric_calculation"))
 
-    # Rule 7: If the user has not provided their glucose level, ask for it
-    @Rule(Fact(action="collect_data"), NOT(Fact(glucose_level=W())), salience=300)
-    def ask_glucose_level(self):
-        glucose_level = input(Utils.prGreen("\n> What is your glucose level?  "))
-        self.declare(Fact(glucose_level=float(glucose_level)))
-        action_id = next(factId for factId, fact in self.facts.items() if fact.get('action'))
-        if action_id:
-            self.retract(action_id)
-        self.declare(Fact(action="suggest_plan")) # update the action fact
-
-    # Suggestions ------------------------------------------------------------------
-    # Rule 8: check glucose level and warn user if it is too high or too low
-    @Rule(Fact(action= "suggest_plan"), Fact(glucose_level=MATCH.glucose_level) , salience=250)
-    def check_glucose_emergency(self, glucose_level):
-        if glucose_level < 50:
-            print(Utils.prRed("\n⚠️ EMERGENCY: Severely low blood sugar! Seek immediate medical attention!"))
-        elif glucose_level > 300:
-            print(Utils.prRed("\n⚠️ EMERGENCY: Severely high blood sugar! Seek immediate medical attention!"))
-
-    # Rule 9: Calculate BMI once all data is collected and warn user if it indicates obesity
-    @Rule(Fact(action= "suggest_plan"), Fact(weight=MATCH.weight), Fact(height=MATCH.height), salience=200)
-    def calculate_bmi(self, weight, height):
-        bmi = weight / ((height/100) ** 2)
-        self.declare(Fact(bmi=bmi))
-        if bmi > 30:
-            print(Utils.prRed("\n⚠️ Warning: BMI indicates obesity. Consider consulting with a healthcare provider."))
-
-     # Rule 10: Calculate BMR once all data is collected 
-    @Rule(Fact(action="suggest_plan"), Fact(gender=MATCH.gender), Fact(age=MATCH.age), Fact(weight=MATCH.weight), Fact(height=MATCH.height), Fact(activity_level=MATCH.activity_level), salience=150)
-    def calculate_bmr(self, gender, age, weight, height, activity_level):
-        bmr = 0
-        if gender == 'female':
-            bmr = 10 * weight + 6.25 * height - 5 * age - 161
+    # Rule 6: Caloric Calculation
+    @Rule(
+        Fact(need="caloric_calculation"),
+        Fact(gender=MATCH.gender),
+        Fact(age=MATCH.age),
+        Fact(weight=MATCH.weight),
+        Fact(height=MATCH.height),
+        Fact(activity_level=MATCH.activity_level),
+        Fact(pregnant=MATCH.pregnant),
+        NOT(Fact(daily_calories=W()))
+    )
+    def calculate_calories(self, gender, age, weight, height, activity_level, pregnant):
+        activity_factors = {
+            "sedentary": 1.2,
+            "light": 1.375,
+            "moderate": 1.55,
+            "active": 1.725,
+            "very_active": 1.9
+        }
+        
+        # Base BMR calculation
+        if gender == "female":
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161
         else:
-            bmr = 10 * weight + 6.25 * height - 5 * age + 5
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5
+            
+        # Apply activity factor
+        calories = bmr * activity_factors[activity_level]
+        
+        # Pregnancy adjustment
+        if pregnant:
+            calories += 300
+            
+        self.declare(Fact(daily_calories=calories))
+        self.declare(Fact(need="macro_calculation"))
 
-            # Calculate the activity factor based on the activity level
-        activity_factor = 0
-        if(activity_level == "sedentary"):
-            activity_factor = 1.2
-        elif(activity_level == "light"):
-            activity_factor = 1.375
-        elif(activity_level == "moderate"):
-            activity_factor = 1.55
-        elif(activity_level == "active"):
-            activity_factor = 1.725
-        elif(activity_level == "very active"):
-            activity_factor = 1.9
-        updatedBMR = activity_factor * bmr
-        self.declare(Fact(bmr=updatedBMR))  # Store BMR as a fact
-
-    # Rule 11: show recommendations based on diabetes type
-    @Rule(Fact(action="suggest_plan"), Fact(diabetes_type=MATCH.diabetes_type), salience=100)
-    def suggest_diabetes_type(self, diabetes_type):
+    # Rule 7: Macro Calculation
+    @Rule(
+        Fact(need="macro_calculation"),
+        Fact(daily_calories=MATCH.calories),
+        Fact(diabetes_type=MATCH.diabetes_type),
+        Fact(activity_level=MATCH.activity_level),
+        NOT(Fact(macros_calculated=True))
+    )
+    def calculate_macros(self, calories, diabetes_type, activity_level):
         if diabetes_type == 1:
-            print(Utils.prLightPurple("\nFor Type 1 diabetes: Balance carbs and protein, include post-exercise snacks to prevent hypoglycemia."))
-        else:
-            print(Utils.prLightPurple("\nFor Type 2 diabetes: Limit high-glycemic carbs, increase fiber intake with meals like vegetables, whole grains, and lean proteins."))
+            carb_percentage = 45 if activity_level in ["active", "very_active"] else 40
+            protein_percentage = 20 if activity_level in ["sedentary", "light"] else 25
+            fat_percentage = 100 - carb_percentage - protein_percentage
+        else:  # Type 2
+            carb_percentage = 40 if activity_level in ["active", "very_active"] else 35
+            protein_percentage = 25 if activity_level in ["sedentary", "light"] else 30
+            fat_percentage = 100 - carb_percentage - protein_percentage
+            
+        carb_grams = (calories * (carb_percentage/100)) / 4
+        protein_grams = (calories * (protein_percentage/100)) / 4
+        fat_grams = (calories * (fat_percentage/100)) / 9
+        
+        self.declare(Fact(carb_grams=carb_grams))
+        self.declare(Fact(protein_grams=protein_grams))
+        self.declare(Fact(fat_grams=fat_grams))
+        self.declare(Fact(macros_calculated=True))
+        self.declare(Fact(need="meal_distribution"))
 
-    # Rule 12: show recommendations based on glucose level
-    @Rule(Fact(action="suggest_plan"), Fact(glucose_level=MATCH.glucose_level), salience=50)
-    def suggest_glucose_level(self, glucose_level):
-        if glucose_level < 70:
-            print(Utils.prLightPurple("\nYour glucose level is low. Please consume 15-20 grams of glucose or simple carbs."))
-        elif glucose_level >= 70 and glucose_level < 180:
-            print(Utils.prLightPurple("\nYour glucose level is normal."))
-        else:
-            print(Utils.prLightPurple(("\nYour glucose level is high. Please drink water and avoid high-carb foods.")))
+    # Rule 8: Meal Distribution
+    @Rule(
+        Fact(need="meal_distribution"),
+        Fact(meal_frequency=MATCH.meals),
+        Fact(carb_grams=MATCH.carbs),
+        Fact(protein_grams=MATCH.protein),
+        Fact(fat_grams=MATCH.fat),
+        NOT(Fact(meal_distribution_complete=True))
+    )
+    def plan_meal_distribution(self, meals, carbs, protein, fat):
+        print("\n🍽️ Daily Meal Distribution:")
+        
+        meal_percentages = {
+            3: [0.30, 0.35, 0.35],  # Breakfast (30%), Lunch (35%), Dinner (35%)
+            4: [0.25, 0.30, 0.25, 0.20],  # Breakfast (25%), Lunch (30%), Dinner (25%), Light Dinner (20%)
+            5: [0.20, 0.25, 0.25, 0.15, 0.15],  # Breakfast (20%), Lunch (25%), Dinner (25%), Light Dinner (15%), Pre-Bed Snack (15%)
+            6: [0.20, 0.20, 0.20, 0.15, 0.15, 0.10]  # Mid-Morning Snack (20%), Breakfast (20%), Lunch (20%), Dinner (15%), Light Dinner (15%), Evening Snack (10%)
+        }
 
+        chosen_distribution = meal_percentages[meals]
+        
+        for i, percentage in enumerate(chosen_distribution, 1):
+            meal_carbs = carbs * percentage
+            meal_protein = protein * percentage
+            meal_fat = fat * percentage
+            print(Utils.prLightPurple(f"\nMeal {i}:"))
+            print(Utils.prLightPurple(f"- Carbohydrates: {meal_carbs:.1f}g"))
+            print(Utils.prLightPurple(f"- Protein: {meal_protein:.1f}g"))
+            print(Utils.prLightPurple(f"- Fat: {meal_fat:.1f}g"))
+            
+        self.declare(Fact(meal_distribution_complete=True))
+        self.declare(Fact(need="recommendations"))
 
-    # Rule 13: Adjust meal plan based on user data
-    @Rule(Fact(action="suggest_plan"), Fact(bmr=MATCH.bmr), Fact(glucose_level=MATCH.glucose_level), salience=1)
-    def adjust_meals(self, bmr, glucose_level):
-        print(Utils.prLightPurple("\nBased on your data, we recommend the following meal plan:"))
-        adjustedMeals = {}
-        meals = {}
-        if bmr < 1500:
-            print("\nWe recommend a low-calorie meal plan")
-            meals =self.meal_options['low_calorie']
-        elif bmr >= 1500 and bmr < 2000:
-            print("\nWe recommend a medium-calorie meal plan")
-            meals =self.meal_options['medium_calorie']
-        else:
-            print("\nWe recommend a high-calorie meal plan")
-            meals =self.meal_options['high_calorie']
-        print(glucose_level)
-        for mealTime, mealOptions in meals.items():
-            adjustedMeals[mealTime] = []
-            for meal in mealOptions:
-                modifiedMeal = meal.copy()
-                if glucose_level > 180:
-                    if modifiedMeal['carbs'] > 30:
-                        modifiedMeal['carbs'] = round(modifiedMeal['carbs'] * 0.8)  # Reduce carbs by 20%
-                        modifiedMeal['details'] += " (reduced portion of carbs)"
-                        modifiedMeal['calories'] = round(modifiedMeal['calories'] * 0.9)
-                adjustedMeals[mealTime].append(modifiedMeal)
+    # Rule 9: Recommendations
+    @Rule(
+        Fact(need="recommendations"),
+        Fact(risk_level=MATCH.risk),
+        Fact(stress_level=MATCH.stress),
+        Fact(sleep_hours=MATCH.sleep),
+        NOT(Fact(recommendations_provided=True))
+    )
+    def provide_recommendations(self, risk, stress, sleep):
+        print("\n📋 I Recommend:")
+        
+        # Risk-based recommendations
+        if risk == "high":
+            print(Utils.prYellow("- Monitor blood glucose more frequently (at least 4 times daily)"))
+            print(Utils.prYellow("- Consider using a continuous glucose monitor"))
+            print(Utils.prYellow("- Schedule regular check-ups with your healthcare provider"))
 
-        self.print_meal_plan(adjustedMeals)
+        # Stress management recommendations
+        if stress == "high":
+            print(Utils.prYellow("- Consider stress-reduction techniques like meditation or yoga"))
+            print(Utils.prYellow("- Monitor blood sugar more frequently during high-stress periods"))
 
-    #helper function to print meal plan
-    def print_meal_plan(self, meal_plan):
-        for meal_type, items in meal_plan.items():
-            print(f"\n{meal_type.capitalize()}:")
-            print(Utils.prYellow("-" * 30))
-            for item in items:
-                print(Utils.prYellow(f"Name: {item['name']}"))
-                print(Utils.prYellow(f"  Calories: {item['calories']} kcal"))
-                print(Utils.prYellow(f"  Details: {item['details']}"))
-                print(Utils.prYellow(f"  Carbs: {item['carbs']} g"))
-                print(Utils.prYellow(f"  Protein: {item['protein']} g"))
-                print(Utils.prYellow(f"  Fats: {item['fats']} g"))
-                print(Utils.prYellow(f"  Glucose Impact: {item['glucose_impact']}"))
-                print(Utils.prYellow("-" * 30))
+        # Sleep recommendations
+        if sleep < 7:
+            print(Utils.prYellow("- Aim to increase sleep duration to 7-8 hours per night"))
+            print(Utils.prYellow("- Consider establishing a regular sleep schedule"))
+
+        print("\n⚠️ Important Reminders:")
+        print(Utils.prYellow("- Always take medications as prescribed"))
+        print(Utils.prYellow("- Keep a food and blood glucose diary"))
+        print(Utils.prYellow("- Stay hydrated throughout the day"))
+        print(Utils.prYellow("- Adjust meal plans based on blood glucose readings"))
+    
+        self.declare(Fact(recommendations_provided=True))
     
 
 class Utils:
@@ -186,4 +248,4 @@ if __name__ == "__main__":
     engine = DiabetesExpert()
     engine.reset()  # Prepare the engine for a new session
     engine.run()  # Run the engine to trigger rules
-    print(Utils.prRed("\n\nThank you for using the Diabetes Expert System 🩸\n"))
+    print(Utils.prRed("\n\n🩸 Thank you for using the Diabetes Meal Planning Expert System 🩸\n"))
