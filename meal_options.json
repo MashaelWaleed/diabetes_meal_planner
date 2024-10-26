@@ -1,144 +1,287 @@
-{
+ {
     "low_calorie": {
         "breakfast": [
             {
-                "name": "Light Oatmeal Bowl",
-                "calories": 300,
-                "details": "1/2 cup oatmeal, 1/2 cup berries, 10 almonds, 1 tsp honey",
-                "carbs": 45,
-                "protein": 10,
-                "fats": 9,
-                "glucose_impact": "moderate"
-            },
-            {
-                "name": "Protein Yogurt Bowl",
+                "name": "Low-GI Overnight Oats",
                 "calories": 250,
-                "details": "1 cup Greek yogurt, 1/4 cup granola, 1/2 cup strawberries",
-                "carbs": 30,
-                "protein": 20,
+                "details": "Steel-cut oats with chia seeds, cinnamon, and a small portion of berries. High in fiber, prevents blood sugar spikes.",
+                "carbs": 25,
+                "fiber": 8,
+                "protein": 12,
                 "fats": 8,
-                "glucose_impact": "low"
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Fiber and protein slow down glucose absorption, cinnamon may help with glucose control",
+                "suitable_for": ["type1", "type2"]
             },
             {
-                "name": "Light Egg Toast",
+                "name": "Protein-Rich Egg Bowl",
                 "calories": 280,
-                "details": "2 eggs, 1 slice whole grain bread, 1/4 avocado",
-                "carbs": 20,
-                "protein": 16,
+                "details": "Scrambled eggs with spinach, mushrooms, and a small portion of sweet potato. Good protein-to-carb ratio.",
+                "carbs": 15,
+                "fiber": 5,
+                "protein": 20,
                 "fats": 12,
-                "glucose_impact": "low"
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "High protein content helps stabilize blood sugar, vegetables add nutrients without significant carbs",
+                "suitable_for": ["type1", "type2"]
             }
         ],
         "lunch": [
             {
-                "name": "Chicken Salad Bowl",
+                "name": "Mediterranean Quinoa Bowl",
                 "calories": 350,
-                "details": "4oz grilled chicken, 2 cups mixed greens, 1 tbsp olive oil dressing",
-                "carbs": 10,
-                "protein": 35,
-                "fats": 15,
-                "glucose_impact": "very low"
+                "details": "Quinoa with grilled chicken, olive oil, cucumber, tomatoes, and feta. Complex carbs with protein.",
+                "carbs": 30,
+                "fiber": 7,
+                "protein": 25,
+                "fats": 14,
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "Complex carbs release glucose slowly, protein and healthy fats help with satiety",
+                "suitable_for": ["type1", "type2"]
             },
             {
-                "name": "Tuna Quinoa Bowl",
-                "calories": 380,
-                "details": "1 can tuna, 1/2 cup quinoa, mixed vegetables",
+                "name": "Legume-Based Salad",
+                "calories": 320,
+                "details": "Lentils, mixed greens, bell peppers, olive oil dressing. High fiber, moderate protein.",
                 "carbs": 35,
-                "protein": 30,
-                "fats": 12,
-                "glucose_impact": "low"
+                "fiber": 12,
+                "protein": 18,
+                "fats": 10,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "High fiber content slows carb absorption, legumes help with blood sugar control",
+                "suitable_for": ["type2"]
             }
         ],
         "dinner": [
             {
-                "name": "Baked Fish Plate",
-                "calories": 320,
-                "details": "5oz white fish, 1 cup roasted vegetables, 1/2 sweet potato",
-                "carbs": 30,
+                "name": "Baked Fish with Greens",
+                "calories": 380,
+                "details": "Cod or salmon with roasted broccoli and cauliflower rice. Low-carb, high protein.",
+                "carbs": 12,
+                "fiber": 6,
                 "protein": 35,
-                "fats": 10,
-                "glucose_impact": "low"
+                "fats": 18,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Omega-3 fatty acids may improve insulin sensitivity, very low carb impact",
+                "suitable_for": ["type1", "type2"]
+            },
+            {
+                "name": "Tofu Vegetable Stir-Fry",
+                "calories": 300,
+                "details": "Tofu, mixed vegetables, small portion of brown rice. Balanced macros.",
+                "carbs": 25,
+                "fiber": 8,
+                "protein": 20,
+                "fats": 12,
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "High fiber vegetables help control blood sugar, plant-based protein good for kidney health",
+                "suitable_for": ["type2"]
             }
         ],
         "snacks": [
             {
-                "name": "Apple and Nuts",
-                "calories": 150,
-                "details": "1 small apple, 12 almonds",
+                "name": "Glucose Emergency Kit",
+                "calories": 60,
+                "details": "15g fast-acting glucose tablets or gel",
                 "carbs": 15,
-                "protein": 4,
-                "fats": 7,
-                "glucose_impact": "moderate"
+                "fiber": 0,
+                "protein": 0,
+                "fats": 0,
+                "glycemic_index": "high",
+                "glucose_impact": "rapid",
+                "diabetes_benefits": "Quick treatment for hypoglycemia",
+                "suitable_for": ["type1"]
+            },
+            {
+                "name": "Balanced Snack",
+                "calories": 150,
+                "details": "Apple slices with almond butter",
+                "carbs": 15,
+                "fiber": 4,
+                "protein": 5,
+                "fats": 8,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Fiber and fat help slow sugar absorption",
+                "suitable_for": ["type1", "type2"]
             }
         ]
     },
     "medium_calorie": {
         "breakfast": [
             {
-                "name": "Power Oatmeal Bowl",
+                "name": "Greek Yogurt Power Bowl",
                 "calories": 400,
-                "details": "3/4 cup oatmeal, 1 cup berries, 15 almonds, 1 scoop protein powder",
-                "carbs": 55,
-                "protein": 25,
-                "fats": 12,
-                "glucose_impact": "moderate"
+                "details": "Greek yogurt, hemp seeds, low-GI granola, berries. High protein, controlled carbs.",
+                "carbs": 35,
+                "fiber": 9,
+                "protein": 28,
+                "fats": 15,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Protein helps prevent morning blood sugar spikes, probiotics may help with glucose metabolism",
+                "suitable_for": ["type1", "type2"]
+            },
+            {
+                "name": "Savory Breakfast Plate",
+                "calories": 450,
+                "details": "Eggs, turkey bacon, avocado, whole grain toast. Balanced macros.",
+                "carbs": 25,
+                "fiber": 7,
+                "protein": 30,
+                "fats": 22,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Good protein-to-carb ratio, healthy fats from avocado",
+                "suitable_for": ["type1", "type2"]
             }
         ],
         "lunch": [
             {
-                "name": "Quinoa Power Bowl",
-                "calories": 450,
-                "details": "5oz chicken, 3/4 cup quinoa, roasted vegetables, avocado",
+                "name": "Lean Protein Bowl",
+                "calories": 500,
+                "details": "Grilled chicken, quinoa, roasted vegetables, hummus. Complex carbs with protein.",
                 "carbs": 45,
-                "protein": 35,
+                "fiber": 10,
+                "protein": 40,
                 "fats": 18,
-                "glucose_impact": "moderate"
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "Balanced meal with steady energy release, good for post-exercise",
+                "suitable_for": ["type1"]
+            },
+            {
+                "name": "Bean and Grain Bowl",
+                "calories": 480,
+                "details": "Mixed beans, barley, vegetables, olive oil. High fiber, moderate protein.",
+                "carbs": 50,
+                "fiber": 15,
+                "protein": 22,
+                "fats": 16,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Very high fiber helps with blood sugar control, beans good for heart health",
+                "suitable_for": ["type2"]
             }
         ],
         "dinner": [
             {
-                "name": "Salmon Dinner",
-                "calories": 480,
-                "details": "6oz salmon, 1 cup brown rice, steamed broccoli",
-                "carbs": 45,
-                "protein": 40,
-                "fats": 22,
-                "glucose_impact": "moderate"
+                "name": "Salmon with Ancient Grains",
+                "calories": 550,
+                "details": "Baked salmon, mixed ancient grains, roasted vegetables. Omega-3 rich.",
+                "carbs": 35,
+                "fiber": 8,
+                "protein": 45,
+                "fats": 25,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Omega-3s may improve insulin sensitivity, ancient grains have lower GI",
+                "suitable_for": ["type1", "type2"]
+            },
+            {
+                "name": "Lean Turkey Plate",
+                "calories": 520,
+                "details": "Turkey breast, sweet potato, green vegetables. Good post-exercise option.",
+                "carbs": 40,
+                "fiber": 9,
+                "protein": 45,
+                "fats": 15,
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "Good for blood sugar control, sweet potato provides steady energy",
+                "suitable_for": ["type1"]
             }
         ]
     },
     "high_calorie": {
         "breakfast": [
             {
-                "name": "Complete Breakfast Bowl",
-                "calories": 550,
-                "details": "1 cup oatmeal, 1.5 cup berries, 20 almonds, 2 eggs",
-                "carbs": 65,
-                "protein": 32,
-                "fats": 18,
-                "glucose_impact": "moderate-high"
+                "name": "Athletic Breakfast Bowl",
+                "calories": 600,
+                "details": "Oatmeal with protein powder, nuts, seeds, and berries. Good for active individuals.",
+                "carbs": 55,
+                "fiber": 12,
+                "protein": 35,
+                "fats": 25,
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "Sustained energy release, good for morning exercise",
+                "suitable_for": ["type1"]
+            },
+            {
+                "name": "High-Protein Start",
+                "calories": 580,
+                "details": "Eggs, tempeh, avocado, whole grain toast. Plant and animal protein mix.",
+                "carbs": 35,
+                "fiber": 10,
+                "protein": 40,
+                "fats": 30,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "High protein helps with morning blood sugar control",
+                "suitable_for": ["type1", "type2"]
             }
         ],
         "lunch": [
             {
-                "name": "Power Lunch Plate",
-                "calories": 600,
-                "details": "7oz chicken, 1 cup quinoa, large salad, avocado",
-                "carbs": 55,
+                "name": "Athletic Power Bowl",
+                "calories": 650,
+                "details": "Brown rice, grilled chicken, avocado, beans, vegetables. Good for active days.",
+                "carbs": 60,
+                "fiber": 12,
                 "protein": 45,
                 "fats": 25,
-                "glucose_impact": "moderate"
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "Balanced for active individuals, good post-exercise",
+                "suitable_for": ["type1"]
+            },
+            {
+                "name": "Mediterranean Plate",
+                "calories": 620,
+                "details": "Fish, quinoa, olive oil, vegetables, legumes. Heart-healthy fats.",
+                "carbs": 50,
+                "fiber": 14,
+                "protein": 40,
+                "fats": 28,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Mediterranean diet pattern beneficial for diabetes management",
+                "suitable_for": ["type2"]
             }
         ],
         "dinner": [
             {
-                "name": "Hearty Dinner Plate",
-                "calories": 650,
-                "details": "8oz lean beef, 1.5 cup brown rice, roasted vegetables",
-                "carbs": 60,
-                "protein": 50,
-                "fats": 28,
-                "glucose_impact": "moderate-high"
+                "name": "Lean Protein Plate",
+                "calories": 700,
+                "details": "Lean steak, sweet potato, large portion of vegetables. Good iron source.",
+                "carbs": 45,
+                "fiber": 10,
+                "protein": 55,
+                "fats": 30,
+                "glycemic_index": "medium",
+                "glucose_impact": "moderate",
+                "diabetes_benefits": "High protein helps with evening blood sugar control",
+                "suitable_for": ["type1", "type2"]
+            },
+            {
+                "name": "Plant-Based Protein Plate",
+                "calories": 680,
+                "details": "Lentils, quinoa, tofu, large portion of vegetables. High fiber.",
+                "carbs": 65,
+                "fiber": 18,
+                "protein": 40,
+                "fats": 25,
+                "glycemic_index": "low",
+                "glucose_impact": "minimal",
+                "diabetes_benefits": "Very high fiber content, good for blood sugar and kidney health",
+                "suitable_for": ["type2"]
             }
         ]
     }
