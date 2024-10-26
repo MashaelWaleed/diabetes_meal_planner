@@ -20,7 +20,7 @@ The Diabetes Meal Planner employs a **forward chaining** reasoning technique, wh
 
 ```bash
 pip install experta
-
+```
 
 
 
