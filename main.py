@@ -1,6 +1,4 @@
 from experta import *
-import json
-
 
 class DiabetesExpert(KnowledgeEngine):
     @DefFacts()
@@ -34,7 +32,7 @@ class DiabetesExpert(KnowledgeEngine):
     # Rule 2: Medical Information Collection
     @Rule(Fact(need="medical_info"), NOT(Fact(medical_info_collected=True)))
     def collect_medical_info(self):
-        print("\n🏥 Now I\m going to ask you about your health: ")
+        print("\n🏥 Now I'm going to ask you about your health: ")
         diabetes_type = int(input(Utils.prGreen("> What type of diabetes do you have? (1/2): ")))
         current_hba1c = float(input(Utils.prGreen("> What is your current hba1c level? (%): ")))
         
@@ -63,7 +61,6 @@ class DiabetesExpert(KnowledgeEngine):
         NOT(Fact(dietary_info_collected=True))
     )
     def collect_dietary_info(self):
-        """Collect dietary preferences and restrictions"""
         print("\n🥗 Now I need to ask you about your diet: ")
         meal_frequency = int(input(Utils.prGreen("> Preferred number of meals per day (3-6): ")))
         snacks = int(input(Utils.prGreen("> Preferred number of snacks per day (0-3): ")))
@@ -167,7 +164,7 @@ class DiabetesExpert(KnowledgeEngine):
         NOT(Fact(meal_distribution_complete=True))
     )
     def plan_meal_distribution(self, meals, carbs, protein, fat):
-        print("\n🍽️ Daily Meal Distribution:")
+        print("\n🍽️  Daily Meal Distribution:")
         
         meal_percentages = {
             3: [0.30, 0.35, 0.35],  # Breakfast (30%), Lunch (35%), Dinner (35%)
