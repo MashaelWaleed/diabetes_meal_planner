@@ -22,6 +22,10 @@ The Diabetes Meal Planner employs a **forward chaining** reasoning technique, wh
 pip install experta
 ```
 
+---
+**Note:** this project made for educational purposes
+---
+
 
 
 
